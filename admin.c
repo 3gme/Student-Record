@@ -94,7 +94,7 @@ void Remove_record(FILE *file, char* id)
     int age;
     char gender;
     int total_grade;
-    while (fscanf(file, "%s %s %s %s %s %s %d", fullname[0], fullname[1], fullname[2], pass, current_id, &age ,gender, &total_grade) == 8) 
+    while (fscanf(file, "%s %s %s %s %s %d %s %d", fullname[0], fullname[1], fullname[2], pass, current_id, &age ,gender, &total_grade) == 8) 
     {
         if (!strcmp(id, current_id)) 
         {
