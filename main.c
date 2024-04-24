@@ -1,5 +1,16 @@
 #include "Methods\method.h"
+#include "user.h"
 
+
+/*
+1234
+1000263279 10203040mahmoud first_name second_name third_name 19 male 98
+1000263278 10203040 first_name second_name third_name 19 male 98
+1000263277 10203040 first_name second_name third_name 19 male 98
+1000263276 10203040 first_name second_name third_name 19 male 98
+1000263275 10203040 first_name second_name third_name 19 male 98
+1 1 m e z 19 female 90
+*/
 
 /*---------------------START OF MAIN---------------------*/
 int main()
@@ -92,27 +103,32 @@ int main()
     {
         int line_num;
         if(!Log_in(file,&line_num)) return 1;
-        printf("%d\n",line_num);
-        
         int option = Show_option_User();
+        
         switch (option)
         {
-        case 1: // show your record
-        //Show_record(file ,id)          (user.c)
+        case 1:                   // show your record
+        Show_record(file ,line_num);          
             break;
          // -------------- //
-        case 2:
+
+        case 2:             // edit pass
             {
-                int pass;
-                //get the new pass 
-                //Edit_pass(file,id,pass);          (user.c)
+                char* pass = (char*) malloc(30);
+                printf("enter the new ");
+                Get_pass(pass);
+                Edit_pass(file,line_num,pass);          
                 break;
             }
         
-        case 3:
+        case 3:             // edit name
             {
-                char* new_name ;
-                //Edit_name(file,id,new_name)           (user.c)
+                char* new_name[3] ;
+                Get_name(new_name);
+                Edit_name(file , line_num , new_name);
+                free(new_name[0]);
+                free(new_name[1]);
+                free(new_name[2]);
             }
             
             break;

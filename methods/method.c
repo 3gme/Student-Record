@@ -12,10 +12,10 @@
 /*---------------------START OF STRUCTS---------------------*/
 typedef struct student{
 int id;
-char* pass;
+char pass[20];
 char* fullname[3];
 int age;
-char* gender;
+char gender[20];
 int total_grade;
 }student;
 /*---------------------END OF STRUCTS---------------------*/
@@ -198,6 +198,22 @@ bool Log_in(FILE* f,int *line_num)                                // handles the
             free(pass);
             return false;
         }
+
+}
+
+void Get_name(char* name[3])
+{
+    name[0] = (char*) malloc(50);
+    name[1] = (char*) malloc(50);
+    name[2] = (char*) malloc(50);
+    printf("\t\t================Enter you new name================\n");
+    printf("\n\t\t\t\tFirst Name  : ");
+    scanf("%s",name[0]);
+    printf("\t\t\t\tSecond Name : ");
+    scanf("%s",name[1]);
+    printf("\t\t\t\tThird Name  : ");
+    scanf("%s",name[2]);
+    printf("\n\t\t================Enter you new name================\n");
 
 }
 /*---------------------END OF FUNCTOINS---------------------*/

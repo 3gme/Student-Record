@@ -23,6 +23,6 @@ int Show_option_User();                             // display the options for t
 int Show_option_Admin();                            // display the optoins for the admin and return his choise 
 bool Check_user_pass(FILE *f , char* pass);          // check if the pass the user entered match the id(true) or not(false) 
 bool Log_in(FILE* f,int* line_num);                               // handles the whole login operatoin 
-
+void Get_name(char* name[3]);
 
 #endif
