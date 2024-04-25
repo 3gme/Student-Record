@@ -1,174 +1,100 @@
-#include <stdio.h>
-#define bool int
-#define true 1
-#define flase 0
-
-typedef struct student
-{
-    /* data */
-}student;
-
-int Get_id()
-{
-    int id;
-    //get the id
-    return id;
-}
-
-int Get_grade()
-{
-    int grade;
-    //
-    return grade;
-}
-
-bool Check_id(FILE *f,int id) 
-{
-    //check if the id exists before
-    //true if not and flase if it exists
-}
-
-char Case()
-{
-    //determine if user or admin
-    //return char 'u' for user , 'a' for admin
-}
-
-int Show_option_Admin()
-{
-    int option ;
-    // show the admin options 
-    // take the option number in option and return it
-    return option; 
-}
-
-int Show_option_User()
-{
-    int option ;
-    // show the user options 
-    // take the option number in option and return it
-    return option; 
-}
+#include "Student-Record-main.c\Methods\method.h"
+#include "Student-Record-main.c\user.h"
 
 
-int main()
-{
+
+/*
+1234
+1000263279 10203040mahmoud first_name second_name third_name 19 male 98
+1000263278 10203040 first_name second_name third_name 19 male 98
+1000263277 10203040 first_name second_name third_name 19 male 98
+1000263276 10203040 first_name second_name third_name 19 male 98
+1000263275 10203040 first_name second_name third_name 19 male 98
+1 1 m e z 19 female 90
+*/
+
+/*---------------------START OF MAIN---------------------*/
+
+
+int main() {
     FILE *file;
-    char ch = Case();
-    if(ch == 'a' )
-    {
-        int pass ;
-        scanf("%d",&pass);
-        // if(check_pass(file,pass))                         (admin.h)
-        // do ... 
+    char ch;
 
-        // show options for the admin to choose what to do
-        int option = Show_option_Admin();
-        switch (option)
-        {
-        case 1: // add a student record
-        {
-            int id = Get_id();
-            if (check_id( file ,id))      
-            //ADD_new_record( file )                     (admin.h)  
-            break;
+    // Prompt the user to choose mode (admin or user)
+    int attempts = 3;
+    do {
+        printf("Will you go user or admin ('u' for user, 'a' for admin): ");
+        scanf(" %c", &ch);
+        if (ch == 'a' || ch == 'u') {
+            break; // Break the loop if a valid input is provided
+        } else {
+            attempts--;
+            if (attempts == 0) {
+                printf("You've exceeded the maximum number of attempts. Exiting...\n");
+                return 1; // Exit the program
+            } else {
+                printf("Invalid input. Please enter 'u' for user mode or 'a' for admin mode.\n");
+            }
         }
-            // ------------- //
+    } while (attempts > 0);
 
-        case 2: // Remove a student record
-        {
-            int id = Get_id();
-            if (!check_id( file ,id))      
-            //Remove_record( file , int id)               (admin.h)  
-            break;
-        }    
-            // ------------- //
-
-        case 3: // view student record
-        {
-            int id = Get_id();
-            if (!ckeck_id( file  , id))
-            //Show_record(file , id)                   (admin.h)  
-            break;
+    // Process user choice
+    if (ch == 'a') {
+        int pass;
+        printf("Enter admin password: ");
+        scanf("%d", &pass);
+        // Validate admin password (to be implemented)
+        // if(check_pass(file, pass)) {
+        //     // Admin authenticated
+        //     // Implement admin actions here
+        // } else {
+        //     printf("Incorrect password. Exiting...\n");
+        // }
+    } else if (ch == 'u') {
+        // User mode
+        int line_num;
+        if (!Log_in(file, &line_num)) {
+            printf("Login failed. Exiting...\n");
+            return 1;
         }
-            // ------------- //
-        
-        case 4: // show all records
-        {
-            //Show_all_records(file) 
 
-            break;
-        }
-            // ------------ //
-
-        case 5: // Edit admin pass   ... admin bass will be in the first line of the file
-        {
-            // ask to get the new pass in int pass 
-            //Edit_pass(file,pass)                        (admin.h)
-
-            break;
-        }
-            // ------------ //
-
-        case 6: // Edit studint grade
-        {
-            int id = Get_id();
-            if(!Check_id(file,id))
-            {
-            
-            int new_grade = Get_grade();
-            //Edit_grade(file,new_grade)                  (admin.h)
+        char choice;
+        do {
+            // Show user options
+            int option = Show_option_User();
+            switch (option) {
+                case 1: // Show record
+                    Show_record(file, line_num);
+                    break;
+                case 2: // Edit password
+                {
+                    char *pass = (char *)malloc(30);
+                    printf("Enter the new password: ");
+                    Get_pass(pass);
+                    Edit_pass(file, line_num, pass);
+                    free(pass);
+                    break;
+                }
+                case 3: // Edit name
+                {
+                    char *new_name[3];
+                    Get_name(new_name);
+                    Edit_name(file, line_num, new_name);
+                    free(new_name[0]);
+                    free(new_name[1]);
+                    free(new_name[2]);
+                    break;
+                }
+                default:
+                    printf("Invalid option.\n");
+                    break;
             }
 
-                break;
-        }
-            // ------------ //
-
-        
-        default:
-            // wrong data
-            break;
-        }
+            // Ask if the user wants to perform another action
+            printf("Do you want to perform another action? (Y/N): ");
+            scanf(" %c", &choice);
+        } while (choice == 'Y' || choice == 'y');
     }
-    else if(ch == 'u')
-    {
-        int option = Show_option_User();
-        int id ; 
-        // get id
-        if(!Check_id(file ,id)) 
-        {
-            //int pass
-            //Get_pass 
-            //check_pass(pass)
-        }
-        
-        switch (option)
-        {
-        case 1: // show your record
-        //Show_record(file ,id)          (user.c)
-            break;
-         // -------------- //
-        case 2:
-            {
-                int pass;
-                //get the new pass 
-                //Edit_pass(file,id,pass);
-                break;
-            }
-        
-        case 3:
-            {
-                char* new_name ;
-                //Edit_name(file,id,new_name)
-            }
-            
-            break;
-        
-        default:
-            //wrong data.
-            break;
-        }
-    }
-    else printf("wrong data try agian");
-    
+
+    return 0;
 }
