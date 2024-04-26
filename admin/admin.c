@@ -137,10 +137,10 @@ void Remove_record(FILE* file, char* id) {
     while(flag)
     {
     int num = atoi(id), line = 0;
-    if(Check_id(file , num ,line ))
+    if(Check_id(file , num ,&line ))
     flag = false ;
 
-    if(counter == 3)
+    if(counter == 3 && flag)
     {
         printf("\t===Sorry invalid data===\n");
         break;
@@ -338,47 +338,68 @@ void Edit_pass_admin()
 }
 
 
-void Edit_grade(FILE* file, char* id , int grade) 
-{
-    grade  = 0;
-    student_ new_student;
-    FILE *temp_file = fopen("temp.txt", "w");
-    if (temp_file == NULL) 
-    {
-        printf("Error opening temporary file.\n");
+void Edit_grade(FILE *file, char* id, int newgrade) {
+    // Open the file for reading and writing
+    file = fopen("file.txt", "r+");
+    if (file == NULL) {
+        printf("Error opening file.\n");
         return;
     }
 
-    int line_count = 0; // Counter to track the line number
-    char password[20];
-    char line[300]; 
-    while (fgets(line, sizeof(line), file) != NULL) 
-    {
-        if (line_count == 0) 
-        {   sscanf(line,"%s",password);
-            fprintf(temp_file, "%s\n",password);
-            line_count++;
-            continue;
-        }
+    int max_students = 10;
+    int num_students = 0;
+    student_ *students = (student_*)malloc(max_students * sizeof(student_));
 
-        sscanf(line, "%s %s %s %s %s %d %s %d", new_student.id, new_student.pass, new_student.fullname[0], new_student.fullname[1], new_student.fullname[2], &new_student.age, new_student.gender, &new_student.total_grade);
-        if (!strcmp(id, new_student.id)) 
-        {
-            int new_grade;
-            printf("Enter new grade: ");
-            scanf("%d", &new_grade);
-            fprintf(temp_file, "%s %s %s %s %s %d %s %d\n", new_student.id, new_student.pass, new_student.fullname[0], new_student.fullname[1], new_student.fullname[2],new_student.age,new_student. gender, new_grade);
-            printf("Grade updated successfully.\n");
-        }
-        else 
-        {
-            fprintf(temp_file, "%s %s %s %s %s %d %s %d\n", new_student.id, new_student.pass,new_student.fullname[0], new_student.fullname[1],new_student. fullname[2], new_student.age, new_student.gender,new_student. total_grade);
+    // Read admin pass
+    char* admin_pass = (char*)malloc(Max_string);
+    fscanf(file, "%s", admin_pass);
+
+    // Read student records
+    while (fscanf(file, "%s", students[num_students].id) == 1) {
+        fscanf(file, "%s %s %s %s %d %s %d",
+               students[num_students].pass,
+               students[num_students].fullname[0],
+               students[num_students].fullname[1],
+               students[num_students].fullname[2],
+               &students[num_students].age,
+               students[num_students].gender,
+               &students[num_students].total_grade);
+        num_students++;
+
+        // Resize array if necessary
+        if (num_students >= max_students) {
+            max_students *= 2;
+            students = (student_*)realloc(students, max_students * sizeof(student_));
+            if (students == NULL) {
+                printf("Memory allocation failed.\n");
+                exit(EXIT_FAILURE);
+            }
         }
     }
-    fclose(temp_file);
-    fclose(file);
 
-    remove("file.txt"); 
-    rename("temp.txt", "file.txt"); 
- 
+    rewind(file); // Reset file pointer to beginning
+
+    // Write admin pass
+    fprintf(file, "%s\n", admin_pass);
+
+    // Write student records with updated grade
+    for (int i = 0; i < num_students; i++) {
+        if (strcmp(students[i].id, id) == 0) {
+            students[i].total_grade = newgrade;
+        }
+        fprintf(file, "%s %s %s %s %s %d %s %d\n",
+                students[i].id,
+                students[i].pass,
+                students[i].fullname[0],
+                students[i].fullname[1],
+                students[i].fullname[2],
+                students[i].age,
+                students[i].gender,
+                students[i].total_grade);
+    }
+
+    fclose(file);
+    free(admin_pass);
+    free(students);
 }
+ 
