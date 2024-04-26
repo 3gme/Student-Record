@@ -82,35 +82,14 @@ int main()
                 // ------------ //
 
 
-            case 6: // Edit studint grade
+            case 6:
             {
-                int id = Get_id();
-                int line_num;
-                int newgrade =0 ; 
-                int attemps = 2 ;
-                while(attemps--)
-                {                
-                    if(attemps == 0 )
-                    {
-                        printf("\t\t----Sorry invalid data----");
-                    }
-                    if(Check_id(file,id,&line_num))
-                    {
-                    char strid[Max_string];
-                    sprintf(strid , "%d" , id);
-                    printf("New Grade: ");
-                    scanf("%d",&newgrade);
-                    // EGA(file , strid , newgrade);
-                    }
-                    else
-                    {
-                    printf("Not valid ID try again\n");
-                    id = Get_id();
-                    }
-                }
-                    break;
-            }
-                // ------------ //
+                char id[100];
+                printf("\t\t\t\t\tStudent ID : ");
+                scanf("%s", id);
+                Edit_grade(file, id);
+                break;
+            }                // ------------ //
 
             
             default:

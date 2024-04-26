@@ -16,7 +16,7 @@ void Show_all_records(FILE *file);
 
 void Edit_pass_admin();
 
-void Edit_grade(FILE *file , char* id , int newgrade);
+void Edit_grade(FILE *file , char* id );
 
 
 #endif

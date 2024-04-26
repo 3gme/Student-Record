@@ -133,7 +133,7 @@ void ADD_new_record(FILE *file)
 
 void Remove_record(FILE* file, char* id) {
     bool flag = true;
-    int counter = 1 ;
+    int counter =  1;           // counter is one cause we get the id once in the main.
     while(flag)
     {
     int num = atoi(id), line = 0;
@@ -142,7 +142,7 @@ void Remove_record(FILE* file, char* id) {
 
     if(counter == 3 && flag)
     {
-        printf("\t===Sorry invalid data===\n");
+        printf("\n\t===Sorry invalid data===\n");
         break;
     }
 
@@ -154,6 +154,8 @@ void Remove_record(FILE* file, char* id) {
     }
 
     }
+
+    if(flag) return;
 
     file = fopen("file.txt", "r");
     if (file == NULL) {
@@ -338,23 +340,47 @@ void Edit_pass_admin()
 }
 
 
-void Edit_grade(FILE *file, char* id, int newgrade) {
-    // Open the file for reading and writing
+void Edit_grade(FILE* file, char* id) 
+{
+    bool flag = true;
+    int counter = 1 ;
+    while(flag)
+    {
+    int num = atoi(id), line = 0;
+    if(Check_id(file , num ,&line ))
+    flag = false ;
+
+    if(counter == 3 && flag)
+    {
+        printf("\t===Sorry invalid data===\n");
+        break;
+    }
+
+    if(flag)
+    {
+        printf("Wrong ID try again: ");
+        scanf("%s",id);
+        counter ++;
+    }
+
+    }
     file = fopen("file.txt", "r+");
     if (file == NULL) {
-        printf("Error opening file.\n");
-        return;
+        perror("Error opening file");
+        exit(EXIT_FAILURE);
     }
 
     int max_students = 10;
     int num_students = 0;
-    student_ *students = (student_*)malloc(max_students * sizeof(student_));
+    student_ *students = (student_ *)malloc(max_students * sizeof(student_));
+    if (students == NULL) {
+        printf("Memory allocation failed.\n");
+        exit(EXIT_FAILURE);
+    }
 
-    // Read admin pass
-    char* admin_pass = (char*)malloc(Max_string);
-    fscanf(file, "%s", admin_pass);
+    char admin_pass[Max_string];
+    fscanf(file, "%s", admin_pass); // Read admin pass
 
-    // Read student records
     while (fscanf(file, "%s", students[num_students].id) == 1) {
         fscanf(file, "%s %s %s %s %d %s %d",
                students[num_students].pass,
@@ -366,10 +392,9 @@ void Edit_grade(FILE *file, char* id, int newgrade) {
                &students[num_students].total_grade);
         num_students++;
 
-        // Resize array if necessary
         if (num_students >= max_students) {
             max_students *= 2;
-            students = (student_*)realloc(students, max_students * sizeof(student_));
+            students = (student_ *)realloc(students, max_students * sizeof(student_));
             if (students == NULL) {
                 printf("Memory allocation failed.\n");
                 exit(EXIT_FAILURE);
@@ -377,16 +402,39 @@ void Edit_grade(FILE *file, char* id, int newgrade) {
         }
     }
 
-    rewind(file); // Reset file pointer to beginning
 
-    // Write admin pass
+    rewind(file);
+    
     fprintf(file, "%s\n", admin_pass);
 
-    // Write student records with updated grade
+    int new_grade,  count = 3;
+     printf("\t\t\t============================================================");
+    while(count--) 
+    {
+   
+    printf("\n\t\t\tEnter the new grade: ");
+    scanf("%d", &new_grade);
+
+    if (new_grade>=0&&new_grade<=100)  break;
+
+    else
+    printf("\n\n\t\t\t\t\t--------invalid data------\n\n");
+
+    
+    }
+
     for (int i = 0; i < num_students; i++) {
+
         if (strcmp(students[i].id, id) == 0) {
-            students[i].total_grade = newgrade;
+            students[i].total_grade = new_grade;
+            printf("\n\t\t\t=================New grade edited successfully===============\n\n");
+           
+            break; 
         }
+ 
+    }
+
+    for (int i = 0; i < num_students; i++) {
         fprintf(file, "%s %s %s %s %s %d %s %d\n",
                 students[i].id,
                 students[i].pass,
@@ -399,7 +447,5 @@ void Edit_grade(FILE *file, char* id, int newgrade) {
     }
 
     fclose(file);
-    free(admin_pass);
     free(students);
 }
- 
