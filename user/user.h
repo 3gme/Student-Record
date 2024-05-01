@@ -11,7 +11,7 @@
 
 struct student;
 
-void Show_record_user(FILE *f ,int line_num);
+void Show_record_user(int line_num);
 
 void Edit_pass_User(FILE *file ,int line_num ,char* new_pass);
 
