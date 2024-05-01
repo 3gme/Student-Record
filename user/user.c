@@ -28,7 +28,7 @@ void Show_record_user(int line_num)
     printf("\n\n\t\t===========================================================\n\n");
     printf("\t\t\t\t\tYOUR RECORD\n");
     printf("\t\t\t\tName        : %s %s %s\n",s.fullname[0],s.fullname[1],s.fullname[2]);
-    printf("\t\t\t\tID          : %s\n",s.id);
+    printf("\t\t\t\tID          : %d\n",s.id);
     printf("\t\t\t\tGender      : %s\n",s.gender);
     printf("\t\t\t\tAge         : %d\n",s.age);
     printf("\t\t\t\tTotal Grade : %d\n",s.total_grade);
@@ -53,7 +53,7 @@ void Edit_pass_User(FILE *f ,int line_num ,char* new_pass)
     
     
     if (f == NULL || tempFile == NULL) {
-        perror("Error opening file");
+        printf("Error opening file");
         exit(EXIT_FAILURE);
     }
 

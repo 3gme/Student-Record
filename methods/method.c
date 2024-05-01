@@ -47,6 +47,7 @@ void Get_pass(char* pass)                           // get the pass from the use
 }
 
 // check if the inserted id is in the file or not and return true in case of the id is in the file. 
+// and determine which line the id is in considiring the pass line
 bool Check_id(FILE *f,int id,int* line_num)         
 {
     f =fopen("file.txt","r");
@@ -143,28 +144,28 @@ int Show_option_Admin()                             // display the optoins for t
     return option; 
 }
 
-bool Check_user_pass(FILE *f , char* pass)          // check if the pass the user entered match the id(true) or not(false) 
+bool Check_user_pass(FILE *f , char* pass,int line_num)          // check if the pass the user entered match the id(true) or not(false) 
 {
 
     f =fopen("file.txt","r");
-    char* buffer = (char*) malloc(101);
-    fscanf(f,"%200[^\n]",buffer);          // to skip the first line.
-    char* _pass = (char*) malloc(20);
-    int id;
-    while(fscanf(f,"%d",&id)!= EOF)
+    char* buffer = (char*) malloc(Max_line);
+    char* _pass = (char*) malloc(Max_string);
+    int id ;
+    while(line_num--)
     {
-        fscanf(f," %s",_pass);
-        if(!strcmp(_pass,pass))  
         {
-            fclose(f);
-            return true;
-        } 
-        else
-        {
-            fscanf(f,"%200[^\n]",buffer);          // to skip the rest of the line.
-
+            fscanf(f,"%199[^\n]",buffer);          // to skip the rest of the line.
+            fgetc(f);
         }
     }
+
+    fscanf(f,"%d",&id);                 // skip the id 
+    fscanf(f,"%s",_pass);               // 
+    if(strcmp(pass,_pass) == 0)  
+    {
+        fclose(f);
+        return true;
+    } 
     fclose(f);
     return false;
 }
@@ -197,7 +198,7 @@ bool Log_in(FILE* f,int *line_num)                                // handles the
         {
             printf("\t\t\t");
             Get_pass(pass);
-            if(Check_user_pass(f,pass)) 
+            if(Check_user_pass(f,pass,*line_num)) 
             {
                 free(pass);
                 return true;                
