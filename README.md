@@ -2,8 +2,8 @@
 ## A "Student Record System" using C
 ### Student record system contain the main data of each student like the name, id, pass, age ,total grade, and gender
 
-*The system has two modes
-1- Admin mode
+#### The system has two modes
+1- Admin mode \n
 2- User mode
 
 you shoud determine which mode you will use in the beginning of the program.
