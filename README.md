@@ -8,7 +8,7 @@
 
 you shoud determine which mode you will use in the beginning of the program.
 
-## *Admin mode
+## + Admin mode
 when the user use the program as admin first thing you are asked is the password of the admin 
 you have 3 tries to enter the right password 
 once you entered the right pass you get the menu of options that the admin can make
@@ -19,7 +19,7 @@ once you entered the right pass you get the menu of options that the admin can m
 5- Edit admin password
 6- Edit student total grade
 
-## *User mode
+## + User mode
 the user mode is meant to the students 
 when you open the program as a user you are asked to enter your id and password
 once you entered the right data you get the menu of options that the user can make
